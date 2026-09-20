@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# secrets and environment
+.env
+.env.*
+!.env.example
+
+# wallet + channel data (holds keys and member list — never commit)
+wallet-data/
+channel-data/
+
+# logs
+*.log
+logs/
+
+# os / editor
+.DS_Store
+*.swp

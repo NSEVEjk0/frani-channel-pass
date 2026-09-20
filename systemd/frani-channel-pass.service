@@ -1,0 +1,20 @@
+[Unit]
+Description=Frani Channel Pass — paywalled broadcast channel on Unicity testnet2
+Documentation=https://github.com/NSEVEjk0/frani-channel-pass
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/projects/frani-channel-pass
+EnvironmentFile=-/home/ubuntu/projects/frani-channel-pass/.env
+ExecStart=/usr/bin/node bin/channel.js daemon
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
