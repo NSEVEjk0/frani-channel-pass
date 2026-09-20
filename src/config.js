@@ -22,7 +22,7 @@ export const config = {
   passDays: Number(process.env.CHANNEL_PASS_DAYS || '30'),
   // Teaser shown to unpaid users when a post goes out.
   teaser: process.env.CHANNEL_TEASER || 'A members-only post just went out. Send "join" to get a pass and read the full channel.',
-  decimals: Number(process.env.CHANNEL_DECIMALS || '8'),
+  decimals: Number(process.env.CHANNEL_DECIMALS || '18'),
 };
 
 export function assertTestnet2() {
