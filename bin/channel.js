@@ -112,6 +112,19 @@ async function cmdDaemon() {
   if (identity?.nametag) log('nametag: @' + identity.nametag);
   log('pass:', config.passPriceUct, 'UCT for', config.passDays, 'days');
 
+  // Membership is keyed by the payer's CHAIN pubkey (from the incoming
+  // transfer). A DM sender is a TRANSPORT pubkey, so resolve it before any
+  // membership lookup, or a paid member would look like a stranger.
+  const resolveChain = async (sender) => {
+    try {
+      const peer = await sphere.resolve(sender);
+      if (peer?.chainPubkey) return peer.chainPubkey;
+    } catch {
+      /* best effort */
+    }
+    return sender;
+  };
+
   const deps = {
     identity,
     requestPass: async (sender) => {
@@ -121,9 +134,9 @@ async function cmdDaemon() {
         memo: `${config.channelName} pass (${config.passDays} days)`,
       });
     },
-    getStatus: (sender) => membershipStatus(store.state, sender),
+    getStatus: async (sender) => membershipStatus(store.state, await resolveChain(sender)),
     cancel: async (sender) => {
-      const m = cancelMembership(store.state, sender);
+      const m = cancelMembership(store.state, await resolveChain(sender));
       if (m) await store.save();
       return !!m;
     },
